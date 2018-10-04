@@ -18,7 +18,10 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  #fail "Unimplemented"
+  page_as_string = page.body
+  first = page_as_string.index(e1)
+  second = page_as_string.index(e2)
+  (first.nil? || second.nil? || (first > second)) ? fail : nil
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -32,21 +35,13 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   # uncheck is nil or something else
   
   strings = rating_list.split
-  if !uncheck.nil?
-    strings.each do |str|
-      new_string = "ratings[" + str + "]"
-      check(new_string)
-    end
-  else
-    strings.each do |str|
-      new_string = "ratings[" + str + "]"
-      uncheck(new_string)
-    end 
+  strings.each do |str|
+    new_string = "ratings[" + str + "]"
+    uncheck.nil? ? check(new_string) : uncheck(new_string)
   end
-  #fail "Unimplemented"
 end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  #fail "Unimplemented"
+  page.all('#movies tbody tr').count.should == Movie.count
 end
