@@ -38,13 +38,7 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   print(uncheck)
   strings.each do |str|
     new_string = "ratings[" + str + "]"
-    if uncheck.nil?
-      check(new_string)
-      print("check", new_string)
-    else 
-      uncheck(new_string)
-      print("uncheck", new_string)
-    end
+      uncheck.nil? ? check(new_string) : uncheck(new_string)
   end
 end
 
